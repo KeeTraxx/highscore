@@ -1,0 +1,25 @@
+sudo: required
+
+language: go
+
+go:
+  - 1.8
+
+services:
+  - docker
+
+before_install:
+  - ~/.nvm/nvm.sh
+  - nvm install --lts
+
+script:
+  - cd frontend
+  - yarn install
+  - yarn run build
+  - cd ..
+  - cd server
+  - go build
+  - cd ..
+  - docker build -t keetraxx/highscore .
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push keetraxx/highscore

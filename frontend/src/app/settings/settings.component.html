@@ -1,0 +1,27 @@
+<div class="main">
+  <md-card *ngIf="user">
+    <md-card-title>
+      Your settings
+    </md-card-title>
+    <md-card-content>
+      <md-list>
+        <md-list-item>
+          <md-input-container>
+            <input mdInput placeholder="Your nickname" [(ngModel)]="user.name">
+          </md-input-container>
+        </md-list-item>
+        <md-list-item>
+          <md-input-container style="width: 80%">
+            <input mdInput placeholder="Avatar" [(ngModel)]="user.picture">
+          </md-input-container>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="accent" (click)="saveSettings(user)">Save</button>
+    </md-card-actions>
+  </md-card>
+</div>
+
+
+<pre>{{user | json}}</pre>

@@ -1,0 +1,38 @@
+div.main {
+  padding: 1em;
+}
+
+md-input-container {
+  width: 80%;
+}
+
+md-card md-input-container {
+  width: 50%;
+}
+
+div.games {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+md-card {
+  margin: 1em;
+  width: 320px;
+}
+
+table.scores {
+  width: 100%
+}
+
+table.scores td, table.scores th {
+  text-align: left;
+  padding: 0.2em;
+
+}
+
+table.scores td img {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}

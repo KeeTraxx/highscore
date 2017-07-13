@@ -1,0 +1,50 @@
+<div class="main">
+  <h1>Game search</h1>
+
+  <md-input-container>
+    <input mdInput [formControl]="formControl" placeholder="Game">
+  </md-input-container>
+
+  <div class="games">
+    <md-card *ngFor="let game of backend.getGames() | async">
+      <md-card-title>
+        {{game.names[0].name}}
+        <button md-icon-button [routerLink]="['/game', game.id]" *ngIf="backend.isLoggedIn() | async"><md-icon>edit</md-icon></button>
+      </md-card-title>
+      <md-card-subtitle>
+        {{game.platform.name}}
+      </md-card-subtitle>
+      <md-card-content>
+        <table class="scores" *ngIf="game.scores">
+          <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Name</th>
+            <th>Score</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let score of game.scores.slice(0,3); let i = index">
+            <td>{{i+1}}.</td>
+            <td><img [src]="score.user.picture"> {{score.user.name}}</td>
+            <td>{{score.score}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <h3 *ngIf="!game.scores">No highscores yet!</h3>
+        <p *ngIf="game.score">
+          Your highscore: {{game.score}} (Rank: {{game.rank}})
+        </p>
+      </md-card-content>
+      <md-card-actions *ngIf="backend.isLoggedIn() | async">
+        <md-input-container>
+          <input type="number" mdInput placeholder="Your score" [(ngModel)]="game.newscore">
+        </md-input-container>
+        <button [disabled]="!game.newscore" md-raised-button color="accent" (click)="backend.saveScore(game, game.newscore).subscribe()">Submit score</button>
+      </md-card-actions>
+    </md-card>
+  </div>
+
+  <button md-raised-button color="accent" routerLink="/game/new" *ngIf="backend.isLoggedIn() | async">Add a new game</button>
+
+</div>

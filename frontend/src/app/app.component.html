@@ -1,0 +1,62 @@
+<md-sidenav-container fullscreen>
+  <md-sidenav #sidenav mode="push" [opened]="showSideNav" (click)="sidenav.close()">
+    <md-list>
+      <md-list-item>
+        <button md-button routerLink="/">
+          <md-icon>home</md-icon>
+          Home
+        </button>
+      </md-list-item>
+      <md-list-item *ngIf="backend.isLoggedIn() | async">
+        <button md-button routerLink="/game/new">
+          <md-icon>addbox</md-icon>
+          Add new game
+        </button>
+      </md-list-item>
+      <md-list-item>
+        <button md-raised-button color="accent" (click)="backend.logout()">
+          <md-icon>exit_to_app</md-icon>
+          Logout
+        </button>
+      </md-list-item>
+    </md-list>
+
+    <md-list *ngIf="!(backend.isLoggedIn() | async)">
+      <md-list-item>
+        <a href="/google/login">
+          <img src="assets/images/btn_google_signin_light_normal_web.png">
+        </a>
+      </md-list-item>
+      <md-list-item>
+        <a href="/facebook/login">
+          <img src="assets/images/btn_facebook_signin.png">
+        </a>
+      </md-list-item>
+    </md-list>
+  </md-sidenav>
+
+  <md-toolbar>
+    <button md-button (click)="sidenav.open()">
+      <md-icon>menu</md-icon>
+    </button>
+    Highscores
+    <span style="flex: 1 1 auto"></span>
+    <div *ngIf="!(backend.isLoggedIn() | async)">
+      <button md-raised-button color="accent" (click)="sidenav.open()">Login</button>
+    </div>
+    <div *ngIf="backend.isLoggedIn() | async">
+      <button md-raised-button color="accent" routerLink="/settings">
+        <md-icon>settings</md-icon>
+        Settings
+      </button>
+      <button md-raised-button color="accent" (click)="backend.logout()">
+        <md-icon>exit_to_app</md-icon>
+        Logout
+      </button>
+    </div>
+
+  </md-toolbar>
+
+  <router-outlet></router-outlet>
+
+</md-sidenav-container>

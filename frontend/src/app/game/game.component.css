@@ -1,0 +1,18 @@
+div.main {
+  padding: 1em;
+}
+
+md-input-container {
+  width: 80%;
+}
+
+div.games {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+md-card {
+  margin: 1em;
+  width: 460px;
+}

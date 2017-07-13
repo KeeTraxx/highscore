@@ -1,0 +1,35 @@
+<div class="main">
+  <md-card>
+    <md-card-title>
+      Game Info
+    </md-card-title>
+    <md-list>
+      <md-list-item *ngFor="let name of game.names; let i = index">
+        <md-input-container>
+          <input mdInput [placeholder]="i == 0 ? 'Game name' : 'Alternate name ' + i" name="name"
+                 [(ngModel)]="name.name">
+        </md-input-container>
+        <button *ngIf="i == 0" md-icon-button (click)="game.names.push({})">
+          <md-icon>add</md-icon>
+        </button>
+        <button *ngIf="i > 0" md-icon-button (click)="game.names.splice(i,1)">
+          <md-icon>remove</md-icon>
+        </button>
+      </md-list-item>
+      <md-list-item>
+        <select placeholder="Platform" [(ngModel)]="game.platform" [compareWith]="compareId">
+          <option *ngFor="let platform of backend.getPlatforms() | async" [ngValue]="platform">
+            {{platform.name}}
+          </option>
+        </select>
+      </md-list-item>
+
+      <md-list-item>
+        <button md-raised-button color="accent" (click)="saveGame(game)">
+          <md-icon>save</md-icon>
+          {{game.id ? 'Save' : 'Add new game'}}
+        </button>
+      </md-list-item>
+    </md-list>
+  </md-card>
+</div>

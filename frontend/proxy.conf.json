@@ -1,0 +1,22 @@
+{
+  "/api": {
+    "target": "http://localhost:1323",
+    "secure": false
+  },
+  "/google": {
+    "target": "http://localhost:1323",
+    "secure": false
+  },
+  "/facebook": {
+    "target": "http://localhost:1323",
+    "secure": false
+  },
+  "/profile": {
+    "target": "http://localhost:1323",
+    "secure": false
+  },
+  "/logout": {
+    "target": "http://localhost:1323",
+    "secure": false
+  }
+}
