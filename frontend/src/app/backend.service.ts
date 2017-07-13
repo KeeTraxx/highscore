@@ -50,9 +50,7 @@ export class BackendService {
     let stripped: Game = {
       id: game.id,
       names: game.names,
-      platform: {
-        name: game.platform.name
-      }
+      platform: game.platform
     };
 
     if (game.id) {
