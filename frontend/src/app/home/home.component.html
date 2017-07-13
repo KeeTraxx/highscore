@@ -26,7 +26,7 @@
           <tbody>
           <tr *ngFor="let score of game.scores.slice(0,3); let i = index">
             <td>{{i+1}}.</td>
-            <td><img [src]="score.user.picture"> {{score.user.name}}</td>
+            <td><img *ngIf="score.user.picture" [src]="score.user.picture"> {{score.user.name}}</td>
             <td>{{score.score}}</td>
           </tr>
           </tbody>

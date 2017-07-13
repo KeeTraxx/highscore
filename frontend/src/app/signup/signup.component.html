@@ -1,0 +1,25 @@
+<div class="main">
+      <md-list>
+        <md-list-item>
+          <md-input-container>
+            <input mdInput placeholder="Username" [(ngModel)]="registration.name">
+          </md-input-container>
+        </md-list-item>
+        <md-list-item>
+          <md-input-container>
+            <input mdInput placeholder="Email" [(ngModel)]="registration.email">
+          </md-input-container>
+        </md-list-item>
+        <md-list-item>
+          <md-input-container>
+            <input type="password" mdInput placeholder="Password" [(ngModel)]="registration.password">
+          </md-input-container>
+        </md-list-item>
+        <md-list-item>
+          <md-input-container>
+            <input type="password" mdInput placeholder="Password confirmation" [(ngModel)]="registration.passwordConfirm">
+          </md-input-container>
+        </md-list-item>
+      </md-list>
+      <button [disabled]="!registration.name || !registration.password || registration.password !== registration.passwordConfirm" md-raised-button color="accent" (click)="backend.signup(registration)">Sign up</button>
+</div>

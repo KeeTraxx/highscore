@@ -9,6 +9,7 @@ import (
 	"github.com/dghubble/gologin"
 	"github.com/dghubble/gologin/facebook"
 	"github.com/dghubble/gologin/google"
+	scrypt "github.com/elithrar/simple-scrypt"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo"
 	"golang.org/x/oauth2"
@@ -32,8 +33,59 @@ func setupAuth(e *echo.Echo) {
 		return c.Redirect(http.StatusFound, "/")
 	})
 
-	e.GET("/profile", getProfile)
 	e.GET("/api/profile", getProfile)
+	e.POST("/api/register", register)
+	e.POST("/local/login", localLogin)
+
+}
+
+func localLogin(c echo.Context) error {
+	var loginData map[string]string
+	c.Bind(&loginData)
+
+	name := loginData["name"]
+	password := loginData["password"]
+
+	var user User
+
+	DB.LogMode(true)
+
+	if DB.
+		Where("name = ? AND type = ?", name, "local").
+		Or("email = ? AND type = ?", name, "local").
+		First(&user).
+		RecordNotFound() {
+		return c.NoContent(http.StatusForbidden)
+	}
+
+	Info.Printf("%+v", user)
+
+	err := scrypt.CompareHashAndPassword([]byte(*user.Password), []byte(password))
+
+	if err != nil {
+		Error.Println(err)
+		return c.NoContent(http.StatusForbidden)
+	}
+
+	sess, err := sessionStore.New(c.Request(), sessionName)
+
+	if err != nil {
+		Error.Println(err)
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
+	sess.Values["profile"] = &Profile{
+		Email: user.Email,
+		Name:  user.Name,
+		ID:    user.ID,
+	}
+
+	if err := sess.Save(c.Request(), c.Response()); err != nil {
+		Error.Println(err)
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func getProfile(c echo.Context) error {
@@ -54,6 +106,43 @@ func getProfile(c echo.Context) error {
 	DB.First(&user, profile.ID)
 
 	return c.JSON(http.StatusOK, &user)
+}
+
+func register(c echo.Context) error {
+	var registration map[string]string
+	c.Bind(&registration)
+
+	var user User
+
+	if !DB.First(&user, &User{
+		Email: registration["email"],
+		Type:  "local",
+	}).RecordNotFound() {
+		Error.Printf("Email already. %+v", user.Email)
+		return c.String(http.StatusNotAcceptable, "Email already exists...")
+	}
+
+	if !DB.First(&user, &User{
+		Name: registration["name"],
+		Type: "local",
+	}).RecordNotFound() {
+		Error.Println("User already.")
+		return c.String(http.StatusNotAcceptable, "Username already exists...")
+	}
+
+	pw, _ := scrypt.GenerateFromPassword([]byte(registration["password"]), scrypt.DefaultParams)
+	Info.Printf("%+v %v", registration, string(pw))
+	pwstr := string(pw)
+
+	DB.Save(&User{
+		Name:       registration["name"],
+		Password:   &pwstr,
+		ProviderID: "local",
+		Type:       "local",
+		Email:      registration["email"],
+	})
+
+	return c.NoContent(http.StatusOK)
 }
 
 func setupGoogle(e *echo.Echo) {
@@ -144,7 +233,7 @@ func issueSessionGoogle() http.Handler {
 
 		if DB.NewRecord(&user) {
 			user.Email = profile.Email
-			user.Picture = profile.Picture
+			user.Picture = &profile.Picture
 			user.Name = profile.Name
 			DB.Save(&user)
 		}
@@ -194,8 +283,6 @@ func issueSessionFacebook() http.Handler {
 
 		Info.Printf("Got userino: %+v", facebookUser)
 
-		gob.Register(&Profile{})
-
 		// 2. Implement a success handler to issue some form of session
 		session, err := sessionStore.New(req, sessionName)
 
@@ -217,7 +304,7 @@ func issueSessionFacebook() http.Handler {
 
 		if DB.NewRecord(&user) {
 			user.Email = profile.Email
-			user.Picture = profile.Picture
+			user.Picture = &profile.Picture
 			user.Name = profile.Name
 			DB.Save(&user)
 		}

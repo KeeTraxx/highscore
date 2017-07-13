@@ -45,11 +45,12 @@ type Platform struct {
 
 type User struct {
 	Base       `json:"-"`
-	ProviderID string `sql:"index" json:"-"`
-	Type       string `json:"-"`
-	Name       string `sql:"index" json:"name"`
-	Email      string `sql:"index" json:"-"`
-	Picture    string `json:"picture"`
+	ProviderID string  `sql:"index" json:"-"`
+	Type       string  `json:"-"`
+	Name       string  `sql:"index" json:"name"`
+	Email      string  `sql:"index" json:"-"`
+	Picture    *string `json:"picture"`
+	Password   *string `json:"-"`
 }
 
 type Score struct {
@@ -99,6 +100,8 @@ func initAPI(e *echo.Group) {
 	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Nintendo GameCube"})
 	DB.FirstOrCreate(&Platform{}, &Platform{Name: "NeoGeo Pocket"})
 	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Sony Playstation 2"})
+	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Sony Playstation 3"})
+	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Sony Playstation 4"})
 	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Microsoft Xbox"})
 	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Nintendo DS"})
 	DB.FirstOrCreate(&Platform{}, &Platform{Name: "Sony PSP"})

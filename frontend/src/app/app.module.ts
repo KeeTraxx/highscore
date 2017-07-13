@@ -9,10 +9,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {
   MdButtonModule, MdInputModule, MdSelectModule, MdListModule, MdCardModule,
-  MdSidenavModule, MdIconModule, MdToolbarModule, MdAutocompleteModule, MdTableModule, MdSnackBarModule
+  MdSidenavModule, MdIconModule, MdToolbarModule, MdAutocompleteModule, MdTableModule, MdSnackBarModule, MdDialogModule
 } from "@angular/material";
 import {BackendService} from "./backend.service";
 import { SettingsComponent } from './settings/settings.component';
+import { SignupComponent } from './signup/signup.component';
 
 const ROUTES = [
   {
@@ -34,7 +35,8 @@ const ROUTES = [
     AppComponent,
     GameComponent,
     HomeComponent,
-    SettingsComponent
+    SettingsComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -51,11 +53,13 @@ const ROUTES = [
     MdSidenavModule,
     MdIconModule,
     MdToolbarModule,
-    MdSnackBarModule
+    MdSnackBarModule,
+    MdDialogModule
   ],
   providers: [
     BackendService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [SignupComponent]
 })
 export class AppModule { }

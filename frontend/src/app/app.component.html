@@ -1,5 +1,5 @@
 <md-sidenav-container fullscreen>
-  <md-sidenav #sidenav mode="push" [opened]="showSideNav" (click)="sidenav.close()">
+  <md-sidenav #sidenav mode="push" [opened]="showSideNav">
     <md-list>
       <md-list-item>
         <button md-button routerLink="/">
@@ -13,7 +13,7 @@
           Add new game
         </button>
       </md-list-item>
-      <md-list-item *ngIf="backend.isLoggedIn() | async" >
+      <md-list-item *ngIf="backend.isLoggedIn() | async">
         <button md-raised-button color="accent" (click)="backend.logout()">
           <md-icon>exit_to_app</md-icon>
           Logout
@@ -31,6 +31,22 @@
         <a href="/facebook/login">
           <img src="assets/images/btn_facebook_signin.png">
         </a>
+      </md-list-item>
+      <md-list-item>
+        <md-input-container>
+          <input type="text" mdInput [(ngModel)]="name" placeholder="Username or email"/>
+        </md-input-container>
+      </md-list-item>
+      <md-list-item>
+        <md-input-container>
+          <input type="password" mdInput [(ngModel)]="password" placeholder="Passwort"/>
+        </md-input-container>
+      </md-list-item>
+      <md-list-item>
+        <button md-raised-button (click)="localLogin(name, password)">Login</button>
+      </md-list-item>
+      <md-list-item>
+        <button md-raised-button color="accent" (click)="openSignup()">Sign Up</button>
       </md-list-item>
     </md-list>
   </md-sidenav>

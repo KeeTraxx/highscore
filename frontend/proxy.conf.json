@@ -15,6 +15,10 @@
     "target": "http://localhost:1323",
     "secure": false
   },
+  "/local": {
+    "target": "http://localhost:1323",
+    "secure": false
+  },
   "/logout": {
     "target": "http://localhost:1323",
     "secure": false

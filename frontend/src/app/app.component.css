@@ -1,3 +1,7 @@
 md-sidenav-container {
   height: 100%;
 }
+
+md-sidenav-container md-input-container {
+  display: block;
+}

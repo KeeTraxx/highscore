@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Game} from "./game";
 import {Observable, BehaviorSubject} from "rxjs";
-import {Http, Headers, RequestOptions} from "@angular/http";
+import {Http, Headers, RequestOptions, Response} from "@angular/http";
 import {Platform} from "./platform";
 import {MdSnackBar} from "@angular/material";
 import {User} from "./user";
@@ -13,13 +13,13 @@ export class BackendService {
   public gameQuery: BehaviorSubject<string> = new BehaviorSubject('');
   private games: BehaviorSubject<Game[]> = new BehaviorSubject([]);
   private platforms: BehaviorSubject<Platform[]> = new BehaviorSubject<Platform[]>([]);
-  private user:BehaviorSubject<User> = new BehaviorSubject(null);
+  private user: BehaviorSubject<User> = new BehaviorSubject(null);
 
   private options = new RequestOptions({
     headers: new Headers({'Content-Type': 'application/json'})
   });
 
-  constructor(private http: Http, private snackbar:MdSnackBar, private router:Router) {
+  constructor(private http: Http, private snackbar: MdSnackBar, private router: Router) {
     this.gameQuery.subscribe(query => this.filterBy(query));
 
     this.http.get('/api/platforms')
@@ -94,16 +94,30 @@ export class BackendService {
     return this.getUser().share().map(user => !!user)
   }
 
-  public logout():void {
+  public logout(): void {
     this.http.post('/logout', '').subscribe(res => window.location.href = '/');
   }
 
-  public saveSettings(user:User):void {
+  public saveSettings(user: User): void {
     this.http.patch('/api/settings', user, this.options).subscribe(res => {
       this.gameQuery.next(this.gameQuery.value);
       this.snackbar.open('Settings saved!');
       this.router.navigate(['/']);
     });
+  }
+
+  public localLogin(name: string, password: string): Observable<Response> {
+    return this.http.post('/local/login', {name, password}, this.options);
+  }
+
+  public signup(registration: any): void {
+    this.http.post('/api/register', registration, this.options)
+      .subscribe(res => {
+        this.snackbar.open('Registration successful. Please login...');
+      }, (err:Response) => {
+        console.log(err);
+        this.snackbar.open('Registration FAILED! ' + err.text());
+      })
   }
 
 }
