@@ -41,11 +41,17 @@ func getProfile(c echo.Context) error {
 	//sess, _ := session.Get(sessionName, c)
 	Info.Printf("%+v", sess)
 
+	_, exists := sess.Values["profile"]
+
+	if !exists {
+		return c.JSON(http.StatusOK, nil)
+	}
+
 	profile := sess.Values["profile"].(*Profile)
 
 	var user User
 
-	DB.Find(&user, profile.ID)
+	DB.First(&user, profile.ID)
 
 	return c.JSON(http.StatusOK, &user)
 }

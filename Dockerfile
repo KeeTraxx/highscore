@@ -5,4 +5,6 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 COPY server/server /app/server
 COPY frontend/dist /app/public
 
+WORKDIR /app
+
 CMD /app/server
