@@ -13,7 +13,7 @@
           Add new game
         </button>
       </md-list-item>
-      <md-list-item>
+      <md-list-item *ngIf="backend.isLoggedIn() | async" >
         <button md-raised-button color="accent" (click)="backend.logout()">
           <md-icon>exit_to_app</md-icon>
           Logout
