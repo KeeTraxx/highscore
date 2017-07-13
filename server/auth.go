@@ -60,7 +60,7 @@ func setupGoogle(e *echo.Echo) {
 	oauth2Config := &oauth2.Config{
 		ClientID:     "736599901494-vet694v3bdbum6n2bbfibdanuam6b02v.apps.googleusercontent.com",
 		ClientSecret: "OVpLOVrGlQNW28S0UuApuqO4",
-		RedirectURL:  "http://localhost:1323/google/callback",
+		RedirectURL:  getenv("BASE_URL", "http://localhost:1323") + "/google/callback",
 		Endpoint:     googleOAuth2.Endpoint,
 		Scopes:       []string{"profile", "email"},
 	}
@@ -74,7 +74,7 @@ func setupFacebook(e *echo.Echo) {
 	oauth2Config := &oauth2.Config{
 		ClientID:     "796487397192190",
 		ClientSecret: "7970506ceaef3e7c1c3ad25f3533ea7e",
-		RedirectURL:  "http://localhost:1323/facebook/callback",
+		RedirectURL:  getenv("BASE_URL", "http://localhost:1323") + "/facebook/callback",
 		Endpoint:     facebookOAuth2.Endpoint,
 		Scopes:       []string{"email"},
 	}
