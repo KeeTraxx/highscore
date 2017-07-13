@@ -299,7 +299,9 @@ func postScore(c echo.Context) error {
 func getPlatforms(c echo.Context) error {
 	var platforms []Platform
 
-	DB.Find(&platforms)
+	DB.
+		Order("name ASC").
+		Find(&platforms)
 
 	if DB.Error != nil {
 		return c.NoContent(http.StatusInternalServerError)
